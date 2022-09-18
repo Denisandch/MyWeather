@@ -72,7 +72,7 @@
                 app:layout_constraintStart_toStartOf="@+id/degrees_text"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="1.0"
-                tools:text="Moscow" />
+                android:text="Moscow" />
 
             <TextView
                 android:id="@+id/degrees_text"
@@ -84,7 +84,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.49"
-                tools:text="12°" />
+                android:text="12°" />
 
             <TextView
                 android:id="@+id/weather_text"
@@ -96,7 +96,7 @@
                 app:layout_constraintStart_toStartOf="@+id/degrees_text"
                 app:layout_constraintTop_toBottomOf="@+id/degrees_text"
                 app:layout_constraintVertical_bias="0.0"
-                tools:text="Облачно" />
+                android:text="Облачно" />
 
             <TextView
                 android:id="@+id/data_text"
@@ -105,7 +105,7 @@
                 android:textSize="20sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                tools:text="13.09.2022" />
+                android:text="13.09.2022" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

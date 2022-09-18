@@ -32,7 +32,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:text="12°" />
+            tools:text="12°C" />
 
         <ImageView
             android:id="@+id/hour_image"
