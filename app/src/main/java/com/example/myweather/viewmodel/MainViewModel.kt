@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.myweather.constans.Days
 import com.example.myweather.databinding.OneHourBinding
 import com.example.myweather.network.api.WeatherNetwork
 import com.example.myweather.network.models.JsonAnswer
@@ -14,7 +15,13 @@ import kotlinx.coroutines.launch
 
 class MainViewModel: ViewModel() {
 
+    private var currentDay = Days.FIRST
+
+
     private lateinit var answer: JsonAnswer
+
+    private var _city = MutableLiveData<String>()
+    val city: LiveData<String> = _city
 
     private var _hoursList = MutableLiveData<List<OneHour>>()
     val hoursList: LiveData<List<OneHour>> = _hoursList
@@ -23,15 +30,22 @@ class MainViewModel: ViewModel() {
     val daysList: LiveData<List<OneDay>> = _daysList
 
     init {
-        Log.i("test", "Зашел в инит")
         viewModelScope.launch {
-            Log.i("test", "загрузка")
-            answer = WeatherNetwork.retrofitService.getWeekWeather(city = "London")
-            Log.i("test", "${answer.location.city}1")
-            _daysList.value = answer.forecast.forecastDay
-            _hoursList.value = _daysList.value!![0].hours
-            Log.i("test", "${(answer.forecast.forecastDay).toString()}2")
+            downloadData()
+            devideData()
         }
+    }
+    private suspend fun downloadData() {
+        answer = WeatherNetwork.retrofitService.getWeekWeather(city = "London")
+    }
+
+    private fun devideData() {
+        _daysList.value = answer.forecast.forecastDay
+        _hoursList.value = _daysList.value!![currentDay.ordinal].hours
+    }
+
+    private fun updateData() {
+
     }
 
 }
