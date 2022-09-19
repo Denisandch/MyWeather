@@ -18,6 +18,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
+import com.example.myweather.adapter.WeatherAdapter
 import com.example.myweather.databinding.FragmentMainBinding
 import com.example.myweather.viewmodel.MainViewModel
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -35,6 +36,7 @@ class MainFragment : Fragment() {
     private lateinit var myFusedLocationProviderClient: FusedLocationProviderClient
     private lateinit var requestPermissionLauncher: ActivityResultLauncher<String>
     private lateinit var binding: FragmentMainBinding
+    private val adapter = WeatherAdapter()
     private val viewModel: MainViewModel by viewModels()
 
     override fun onCreateView(
@@ -48,7 +50,7 @@ class MainFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        Log.i("test", "Приложение запущено")
         checkPermission()
         initProperties()
     }
@@ -92,6 +94,14 @@ class MainFragment : Fragment() {
 
     private fun initProperties() {
         myFusedLocationProviderClient = getFusedLocationProviderClient(requireContext())
+        Log.i("test", "Поля инициализированы")
+
+        viewModel.hoursList.observe(viewLifecycleOwner) {
+            adapter.submitList(it)
+            Log.i("test", "Список обновлен")
+        }
+
+        binding.daysRecycler.adapter = adapter
     }
 
     private fun workWithGPS() {

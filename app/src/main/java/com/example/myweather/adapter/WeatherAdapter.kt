@@ -1,45 +1,56 @@
 package com.example.myweather.adapter
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.net.toUri
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import coil.load
 import com.example.myweather.R
 import com.example.myweather.databinding.FragmentMainBinding
 import com.example.myweather.databinding.OneHourBinding
 import com.example.myweather.network.models.maininfo.forecastday.day.OneDay
+import com.example.myweather.network.models.maininfo.forecastday.day.hour.OneHour
 
-class WeatherAdapter: ListAdapter<OneDay, WeatherAdapter.WeatherDayHolder>(DiffCallback) {
+class WeatherAdapter: ListAdapter<OneHour, WeatherAdapter.WeatherHourHolder>(DiffCallback) {
 
-    class WeatherDayHolder(private var binding: OneHourBinding): RecyclerView.ViewHolder(binding.root) {
+    class WeatherHourHolder(view: View): RecyclerView.ViewHolder(view) {
 
-        fun init(oneDay: OneDay) {
-            //TODO to inflate the layout with the object
+        private val binding = OneHourBinding.bind(view)
+
+        fun init(oneHour: OneHour) {
+            binding.hourImage.load(oneHour.condition.hourWeatherIcon.toUri().buildUpon().scheme("https").build())
+            binding.hourDegree.text = oneHour.temp.toString()
+            binding.hourTime.text = oneHour.time.substringAfterLast(' ')
+            Log.i("test", "Заполнено поле")
         }
 
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WeatherDayHolder {
-        return WeatherDayHolder(OneHourBinding.inflate(LayoutInflater.from(parent.context)))
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WeatherHourHolder {
+        Log.i("test", "Создано место")
+        return WeatherHourHolder(LayoutInflater.from(parent.context).inflate(R.layout.one_hour,parent,false))
     }
 
-    override fun onBindViewHolder(holder: WeatherDayHolder, position: Int) {
+    override fun onBindViewHolder(holder: WeatherHourHolder, position: Int) {
 
-        val oneDay = getItem(position)
+        val oneHour = getItem(position)
 
-        holder.init(oneDay)
+        holder.init(oneHour)
     }
 
-    object DiffCallback: DiffUtil.ItemCallback<OneDay>() {
+    object DiffCallback: DiffUtil.ItemCallback<OneHour>() {
 
-        override fun areItemsTheSame(oldItem: OneDay, newItem: OneDay): Boolean {
-            return oldItem.date == newItem.date
+        override fun areItemsTheSame(oldItem: OneHour, newItem: OneHour): Boolean {
+            Log.i("test", "Сравнение")
+            return oldItem.time == newItem.time
         }
 
-        override fun areContentsTheSame(oldItem: OneDay, newItem: OneDay): Boolean {
-            return oldItem.dayWeather.avgTemp == newItem.dayWeather.avgTemp
+        override fun areContentsTheSame(oldItem: OneHour, newItem: OneHour): Boolean {
+            return oldItem.temp == newItem.temp
         }
 
     }
