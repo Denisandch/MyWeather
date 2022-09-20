@@ -37,6 +37,14 @@
             android:padding="10dp">
 
             <ImageView
+                android:id="@+id/weather_icon"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                tools:src="@drawable/ic_launcher_foreground"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+            <ImageView
                 android:id="@+id/search_by_city_button"
                 android:layout_width="35dp"
                 android:layout_height="35dp"
@@ -65,7 +73,7 @@
                 android:id="@+id/city_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Moscow"
+                tools:text="Moscow"
                 android:textSize="20dp"
                 app:layout_constraintBottom_toTopOf="@+id/degrees_text"
                 app:layout_constraintEnd_toEndOf="@+id/degrees_text"
@@ -78,7 +86,7 @@
                 android:id="@+id/degrees_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="12°"
+                tools:text="12°"
                 android:textSize="70dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -90,7 +98,7 @@
                 android:id="@+id/weather_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Облачно"
+                tools:text="Облачно"
                 android:textSize="20dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="@+id/degrees_text"
@@ -99,10 +107,19 @@
                 app:layout_constraintVertical_bias="0.0" />
 
             <TextView
-                android:id="@+id/data_text"
+                android:id="@+id/local_time_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="13.09.2022"
+                tools:text="10:00"
+                android:textSize="20sp"
+                app:layout_constraintBottom_toTopOf="@id/date_text"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <TextView
+                android:id="@+id/date_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="13.09.2022"
                 android:textSize="20sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />

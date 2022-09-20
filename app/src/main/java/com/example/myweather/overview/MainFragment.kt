@@ -17,18 +17,19 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.net.toUri
 import androidx.fragment.app.viewModels
+import coil.load
+import com.example.myweather.R
 import com.example.myweather.adapter.WeatherAdapter
 import com.example.myweather.databinding.FragmentMainBinding
-import com.example.myweather.viewmodel.MainViewModel
+import com.example.myweather.overview.viewmodel.MainViewModel
 import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationRequest
-import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.LocationServices.getFusedLocationProviderClient
 import com.google.android.gms.location.Priority
 import com.google.android.gms.tasks.CancellationTokenSource
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import java.util.jar.Manifest
+import kotlinx.coroutines.*
 
 
 class MainFragment : Fragment() {
@@ -53,6 +54,7 @@ class MainFragment : Fragment() {
         Log.i("test", "Приложение запущено")
         checkPermission()
         initProperties()
+        initBottoms()
     }
 
     override fun onResume() {
@@ -94,14 +96,35 @@ class MainFragment : Fragment() {
 
     private fun initProperties() {
         myFusedLocationProviderClient = getFusedLocationProviderClient(requireContext())
-        Log.i("test", "Поля инициализированы")
+
+        setObserves()
+
+        binding.daysRecycler.adapter = adapter
+    }
+
+    private fun setObserves() {
 
         viewModel.hoursList.observe(viewLifecycleOwner) {
             adapter.submitList(it)
-            Log.i("test", "Список обновлен")
+        }
+        viewModel.showedData.observe(viewLifecycleOwner) {
+            binding.apply {
+                cityText.text = it.location
+                weatherText.text = it.weatherTitle
+                weatherIcon.load(it.weatherIcon.toUri().buildUpon().scheme("https").build())
+                dateText.text = it.date
+                localTimeText.text = it.localTime
+
+                if (it.isToday) {
+                    degreesText.text = it.currentTemp
+                    localTimeText.visibility = View.VISIBLE
+                } else {
+                    localTimeText.visibility = View.INVISIBLE
+                    degreesText.text = "${it.minTemp}/${it.maxTemp}"
+                }
+            }
         }
 
-        binding.daysRecycler.adapter = adapter
     }
 
     private fun workWithGPS() {
@@ -150,4 +173,22 @@ class MainFragment : Fragment() {
             .show()
     }
 
+    private fun initBottoms() {
+
+        binding.updateButton.setOnClickListener {
+            GlobalScope.launch {
+                withContext(Dispatchers.Main) {
+                    viewModel.updateData()
+                }
+            }
+        }
+
+        binding.searchByCityButton.setOnClickListener {
+
+        }
+
+        binding.searchByDayButton.setOnClickListener {
+            viewModel.changeDate()
+        }
+    }
 }
