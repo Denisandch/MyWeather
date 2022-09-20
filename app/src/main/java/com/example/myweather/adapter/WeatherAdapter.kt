@@ -21,7 +21,7 @@ class WeatherAdapter: ListAdapter<OneHour, WeatherAdapter.WeatherHourHolder>(Dif
 
         fun init(oneHour: OneHour) {
             binding.hourImage.load(oneHour.condition.hourWeatherIcon.toUri().buildUpon().scheme("https").build())
-            binding.hourDegree.text = oneHour.temp.roundToInt().toString()
+            binding.hourDegree.text = "${oneHour.temp.roundToInt()}°C"
             binding.hourTime.text = oneHour.time.substringAfterLast(' ')
         }
     }

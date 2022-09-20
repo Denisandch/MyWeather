@@ -110,9 +110,9 @@ class MainViewModel : ViewModel() {
         _showedData.value = ShowedData(
             isToday = currentDay == Days.FIRST,
             location = answer.location.city,
-            currentTemp = answer.currentWeather.CurrentTemp.roundToInt().toString(),
+            currentTemp = answer.currentWeather.CurrentTemp.roundToInt().toString() + "°C",
             minTemp = daysList[currentDay.ordinal].dayWeather.minTemp.roundToInt().toString(),
-            maxTemp = daysList[currentDay.ordinal].dayWeather.maxTemp.roundToInt().toString(),
+            maxTemp = daysList[currentDay.ordinal].dayWeather.maxTemp.roundToInt().toString() + "°C",
             date = daysList[currentDay.ordinal].date,
             localTime = answer.location.currentLocalTime.substringAfter(' '),
             weatherTitle = chooseWeatherTilte(),
