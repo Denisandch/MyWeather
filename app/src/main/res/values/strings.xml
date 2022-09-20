@@ -1,5 +1,12 @@
 <resources>
     <string name="app_name">MyWeather</string>
     <string name="degrees">%s°C</string>
+    <string name="default_city">Moscow</string>
+    <string name="allow_location_tracking">You need to allow location tracking</string>
+    <string name="unavailable_features">Some features may be unavailable: location is not allowed</string>
+    <string name="turn_on">Do you want to turn on GPS?</string>
+    <string name="getting_location">Getting a location</string>
+    <string name="update_error">Error while updating data</string>
+    <string name="search_error">Incorrect city name</string>
 </resources>
 

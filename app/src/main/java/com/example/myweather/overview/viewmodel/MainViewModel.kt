@@ -1,66 +1,85 @@
 package com.example.myweather.overview.viewmodel
 
-import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.myweather.constans.Days
+import com.example.myweather.constans.Errors
 import com.example.myweather.network.api.WeatherNetwork
 import com.example.myweather.network.models.JsonAnswer
 import com.example.myweather.network.models.maininfo.forecastday.day.OneDay
 import com.example.myweather.network.models.maininfo.forecastday.day.hour.OneHour
 import com.example.myweather.overview.model.ShowedData
 import kotlinx.coroutines.launch
+import java.lang.Exception
+import kotlin.math.roundToInt
 
-class MainViewModel: ViewModel() {
+const val DEFAULT_CITY = "Moscow"
 
+class MainViewModel : ViewModel() {
+
+    private var city = DEFAULT_CITY
     private var currentDay = Days.FIRST
-
     private lateinit var answer: JsonAnswer
+    private lateinit var daysList: List<OneDay>
 
     private var _showedData = MutableLiveData<ShowedData>()
     val showedData: LiveData<ShowedData> = _showedData
 
+    private var _error = MutableLiveData<Int>()
+    val error: LiveData<Int> = _error
+
     private var _hoursList = MutableLiveData<List<OneHour>>()
     val hoursList: LiveData<List<OneHour>> = _hoursList
 
-    private var _daysList = MutableLiveData<List<OneDay>>()
-    val daysList: LiveData<List<OneDay>> = _daysList
-
     init {
-        Log.i("inter", "Начало инита")
         viewModelScope.launch {
-            Log.i("inter", "начало обновления")
             updateData()
         }
-        Log.i("inter", "конец инита")
     }
 
     suspend fun updateData() {
-        currentDay = Days.FIRST
-        downloadData()
-        devideData()
-        fillShowedData()
+        try {
+            currentDay = Days.FIRST
+            downloadData()
+            devideData()
+            fillShowedData()
+        } catch (e: Exception) {
+            city = showedData.value?.location ?: DEFAULT_CITY
+            _error.value = Errors.ErrorUdate
+        }
     }
 
     private suspend fun downloadData() {
-        answer = WeatherNetwork.retrofitService.getWeekWeather(city = "Moscow")
+        answer = WeatherNetwork.retrofitService.getWeekWeather(city = city)
+    }
+
+    fun setCity(city: String) {
+        this.city = city
+        viewModelScope.launch {
+            updateData()
+        }
     }
 
     private fun devideData() {
-        _daysList.value = answer.forecast.forecastDay
-        _hoursList.value = _daysList.value!![currentDay.ordinal].hours
+        daysList = answer.forecast.forecastDay
+        _hoursList.value = daysList[currentDay.ordinal].hours
     }
 
     fun changeDate() {
         nextDay()
-        _hoursList.value = _daysList.value!![currentDay.ordinal].hours
-        fillShowedData()
+        try {
+            _hoursList.value = daysList[currentDay.ordinal].hours
+            fillShowedData()
+        } catch (e: Exception) {
+            _error.value = Errors.ErrorSearch
+        }
     }
 
     private fun nextDay() {
-        currentDay = when(currentDay) {
+        currentDay = when (currentDay) {
             Days.FIRST -> Days.SECOND
             Days.SECOND -> Days.THIRD
             Days.THIRD -> Days.FOURTH
@@ -71,19 +90,19 @@ class MainViewModel: ViewModel() {
         }
     }
 
-    private fun chooseWeatherTilte(): String{
-        return if(currentDay == Days.FIRST) {
+    private fun chooseWeatherTilte(): String {
+        return if (currentDay == Days.FIRST) {
             answer.currentWeather.CurrentCondition.currentWeatherText
         } else {
-            _daysList.value!![currentDay.ordinal].dayWeather.dayCondition.dayWeatherText
+            daysList[currentDay.ordinal].dayWeather.dayCondition.dayWeatherText
         }
     }
 
-    private fun chooseWeatherIcon(): String{
-        return if(currentDay == Days.FIRST) {
+    private fun chooseWeatherIcon(): String {
+        return if (currentDay == Days.FIRST) {
             answer.currentWeather.CurrentCondition.currentWeatherIcon
         } else {
-            _daysList.value!![currentDay.ordinal].dayWeather.dayCondition.dayWeatherIcon
+            daysList[currentDay.ordinal].dayWeather.dayCondition.dayWeatherIcon
         }
     }
 
@@ -91,10 +110,10 @@ class MainViewModel: ViewModel() {
         _showedData.value = ShowedData(
             isToday = currentDay == Days.FIRST,
             location = answer.location.city,
-            currentTemp = answer.currentWeather.CurrentTemp.toString(),
-            minTemp = _daysList.value!![currentDay.ordinal].dayWeather.minTemp.toString(),
-            maxTemp = _daysList.value!![currentDay.ordinal].dayWeather.maxTemp.toString(),
-            date = _daysList.value!![currentDay.ordinal].date,
+            currentTemp = answer.currentWeather.CurrentTemp.roundToInt().toString(),
+            minTemp = daysList[currentDay.ordinal].dayWeather.minTemp.roundToInt().toString(),
+            maxTemp = daysList[currentDay.ordinal].dayWeather.maxTemp.roundToInt().toString(),
+            date = daysList[currentDay.ordinal].date,
             localTime = answer.location.currentLocalTime.substringAfter(' '),
             weatherTitle = chooseWeatherTilte(),
             weatherIcon = chooseWeatherIcon()

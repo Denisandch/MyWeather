@@ -11,6 +11,7 @@ import coil.load
 import com.example.myweather.R
 import com.example.myweather.databinding.OneHourBinding
 import com.example.myweather.network.models.maininfo.forecastday.day.hour.OneHour
+import kotlin.math.roundToInt
 
 class WeatherAdapter: ListAdapter<OneHour, WeatherAdapter.WeatherHourHolder>(DiffCallback) {
 
@@ -20,10 +21,9 @@ class WeatherAdapter: ListAdapter<OneHour, WeatherAdapter.WeatherHourHolder>(Dif
 
         fun init(oneHour: OneHour) {
             binding.hourImage.load(oneHour.condition.hourWeatherIcon.toUri().buildUpon().scheme("https").build())
-            binding.hourDegree.text = oneHour.temp.toString()
+            binding.hourDegree.text = oneHour.temp.roundToInt().toString()
             binding.hourTime.text = oneHour.time.substringAfterLast(' ')
         }
-
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WeatherHourHolder {
