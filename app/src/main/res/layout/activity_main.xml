@@ -6,11 +6,11 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-<androidx.fragment.app.FragmentContainerView
-    android:id="@+id/main_fragment"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:name="com.example.myweather.overview.MainFragment"
-    tools:layout="@layout/fragment_main"/>
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/main_fragment"
+        android:name="com.example.myweather.overview.MainFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:layout="@layout/fragment_main" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
