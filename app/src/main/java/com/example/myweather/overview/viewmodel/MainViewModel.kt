@@ -1,16 +1,15 @@
 package com.example.myweather.overview.viewmodel
 
-import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.myweather.constans.Days
-import com.example.myweather.constans.Errors
-import com.example.myweather.network.api.WeatherNetwork
-import com.example.myweather.network.models.JsonAnswer
-import com.example.myweather.network.models.maininfo.forecastday.day.OneDay
-import com.example.myweather.network.models.maininfo.forecastday.day.hour.OneHour
+import com.example.myweather.utils.Days
+import com.example.myweather.utils.Errors
+import com.example.myweather.network.model.JsonAnswer
+import com.example.myweather.network.model.maininfo.forecastday.day.OneDay
+import com.example.myweather.network.model.maininfo.forecastday.day.hour.OneHour
+import com.example.myweather.network.repository.Repository
 import com.example.myweather.overview.model.ShowedData
 import kotlinx.coroutines.launch
 import java.lang.Exception
@@ -18,7 +17,7 @@ import kotlin.math.roundToInt
 
 const val DEFAULT_CITY = "Moscow"
 
-class MainViewModel : ViewModel() {
+class MainViewModel(private val repository: Repository) : ViewModel() {
 
     private var city = DEFAULT_CITY
     private var currentDay = Days.FIRST
@@ -53,7 +52,7 @@ class MainViewModel : ViewModel() {
     }
 
     private suspend fun downloadData() {
-        answer = WeatherNetwork.retrofitService.getWeekWeather(city = city)
+        answer = repository.getWeekWeather(city)
     }
 
     fun setCity(city: String) {

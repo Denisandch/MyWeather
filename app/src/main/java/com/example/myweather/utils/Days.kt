@@ -1,4 +1,4 @@
-package com.example.myweather.constans
+package com.example.myweather.utils
 
 enum class Days {
     FIRST,

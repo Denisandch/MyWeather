@@ -1,4 +1,4 @@
-package com.example.myweather.network.models.maininfo.forecastday.day.hour.condition
+package com.example.myweather.network.model.maininfo.forecastday.day.hour.condition
 
 import com.squareup.moshi.Json
 

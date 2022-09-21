@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.example.myweather.R
 import com.example.myweather.databinding.OneHourBinding
-import com.example.myweather.network.models.maininfo.forecastday.day.hour.OneHour
+import com.example.myweather.network.model.maininfo.forecastday.day.hour.OneHour
 import kotlin.math.roundToInt
 
 class WeatherAdapter: ListAdapter<OneHour, WeatherAdapter.WeatherHourHolder>(DiffCallback) {

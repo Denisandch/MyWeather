@@ -26,12 +26,15 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.example.myweather.R
 import com.example.myweather.adapter.WeatherAdapter
 import com.example.myweather.databinding.FragmentMainBinding
+import com.example.myweather.network.repository.Repository
 import com.example.myweather.overview.viewmodel.MainViewModel
+import com.example.myweather.overview.viewmodel.MainViewModelFactory
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices.getFusedLocationProviderClient
 import com.google.android.gms.location.Priority
@@ -46,8 +49,8 @@ class MainFragment : Fragment() {
     private lateinit var myFusedLocationProviderClient: FusedLocationProviderClient
     private lateinit var requestPermissionLauncher: ActivityResultLauncher<String>
     private lateinit var binding: FragmentMainBinding
+    private lateinit var viewModel: MainViewModel
     private val adapter = WeatherAdapter()
-    private val viewModel: MainViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -90,11 +93,17 @@ class MainFragment : Fragment() {
     private fun initProperties() {
         myFusedLocationProviderClient = getFusedLocationProviderClient(requireContext())
 
+        setViewModel()
+
         setObserves()
 
         binding.daysRecycler.adapter = adapter
     }
 
+    private fun setViewModel() {
+        val viewModelFactory = MainViewModelFactory(Repository())
+        viewModel = ViewModelProvider(this, viewModelFactory).get(MainViewModel::class.java)
+    }
     private fun setObserves() {
 
         viewModel.error.observe(viewLifecycleOwner) {

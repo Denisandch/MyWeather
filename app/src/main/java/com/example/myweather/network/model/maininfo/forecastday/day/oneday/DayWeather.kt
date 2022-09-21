@@ -1,6 +1,6 @@
-package com.example.myweather.network.models.maininfo.forecastday.day.oneday
+package com.example.myweather.network.model.maininfo.forecastday.day.oneday
 
-import com.example.myweather.network.models.maininfo.forecastday.day.oneday.condition.DayCondition
+import com.example.myweather.network.model.maininfo.forecastday.day.oneday.condition.DayCondition
 import com.squareup.moshi.Json
 
 data class DayWeather (

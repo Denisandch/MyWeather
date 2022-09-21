@@ -1,5 +1,4 @@
-package com.example.myweather.constans
-import android.content.Context
+package com.example.myweather.utils
 import com.example.myweather.R
 
 object Errors {

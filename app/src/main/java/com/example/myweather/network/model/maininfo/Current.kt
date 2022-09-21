@@ -1,6 +1,6 @@
-package com.example.myweather.network.models.maininfo
+package com.example.myweather.network.model.maininfo
 
-import com.example.myweather.network.models.maininfo.condition.CurrentCondition
+import com.example.myweather.network.model.maininfo.condition.CurrentCondition
 import com.squareup.moshi.Json
 
 data class Current(
