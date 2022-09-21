@@ -34,20 +34,20 @@ class MainViewModel(private val repository: Repository) : ViewModel() {
     val hoursList: LiveData<List<OneHour>> = _hoursList
 
     init {
-        viewModelScope.launch {
-            updateData()
-        }
+        updateData()
     }
 
-    suspend fun updateData() {
-        try {
-            currentDay = Days.FIRST
-            downloadData()
-            devideData()
-            fillShowedData()
-        } catch (e: Exception) {
-            city = showedData.value?.location ?: DEFAULT_CITY
-            _error.value = Errors.ErrorUdate
+    fun updateData() {
+        viewModelScope.launch {
+            try {
+                currentDay = Days.FIRST
+                downloadData()
+                devideData()
+                fillShowedData()
+            } catch (e: Exception) {
+                city = showedData.value?.location ?: DEFAULT_CITY
+                _error.value = Errors.ErrorUdate
+            }
         }
     }
 
@@ -57,9 +57,7 @@ class MainViewModel(private val repository: Repository) : ViewModel() {
 
     fun setCity(city: String) {
         this.city = city
-        viewModelScope.launch {
-            updateData()
-        }
+        updateData()
     }
 
     private fun devideData() {
@@ -111,7 +109,8 @@ class MainViewModel(private val repository: Repository) : ViewModel() {
             location = answer.location.city,
             currentTemp = answer.currentWeather.CurrentTemp.roundToInt().toString() + "°C",
             minTemp = daysList[currentDay.ordinal].dayWeather.minTemp.roundToInt().toString(),
-            maxTemp = daysList[currentDay.ordinal].dayWeather.maxTemp.roundToInt().toString() + "°C",
+            maxTemp = daysList[currentDay.ordinal].dayWeather.maxTemp.roundToInt()
+                .toString() + "°C",
             date = daysList[currentDay.ordinal].date,
             localTime = answer.location.currentLocalTime.substringAfter(' '),
             weatherTitle = chooseWeatherTilte(),

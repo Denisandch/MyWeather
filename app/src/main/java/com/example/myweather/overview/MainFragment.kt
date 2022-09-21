@@ -190,22 +190,13 @@ class MainFragment : Fragment() {
 
         binding.updateButton.setOnClickListener {
 
-            GlobalScope.launch {
-                withContext(Dispatchers.Main) {
-                    viewModel.updateData()
-                }
-            }
+            viewModel.updateData()
         }
 
         binding.searchByCityButton.setOnClickListener {
             inputCity()
 
-            GlobalScope.launch {
-                withContext(Dispatchers.Main) {
-                    viewModel.updateData()
-                }
-            }
-
+            viewModel.updateData()
         }
 
         binding.showNextDay.setOnClickListener {
@@ -216,12 +207,8 @@ class MainFragment : Fragment() {
             if (ContextCompat
                     .checkSelfPermission(activity as AppCompatActivity,
                         android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-                GlobalScope.launch {
-                    withContext(Dispatchers.Main) {
-                        workWithGPS()
-                        viewModel.updateData()
-                    }
-                }
+                workWithGPS()
+                viewModel.updateData()
             } else {
                 Toast.makeText(requireContext(), getString(R.string.allow_location_tracking), Toast.LENGTH_SHORT).show()
             }
