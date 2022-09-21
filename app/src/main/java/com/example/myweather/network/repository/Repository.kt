@@ -1,7 +1,6 @@
 package com.example.myweather.network.repository
 
 import com.example.myweather.network.api.RetrofitInstance
-import com.example.myweather.network.api.WeatherApi
 import com.example.myweather.network.model.JsonAnswer
 
 class Repository {
